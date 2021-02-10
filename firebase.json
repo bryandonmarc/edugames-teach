@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "edugames-teach",
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
