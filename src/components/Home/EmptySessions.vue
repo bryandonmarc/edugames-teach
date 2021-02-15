@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex flex-col flex-shrink-0 w-full py-2 mt-8 mr-6 text-white bg-purple-300 rounded-lg md:w-1/2"
-  >
+  <div>
     <h3 class="flex items-center px-8 pt-1 pb-1 text-lg font-bold capitalize">
       <span>Scheduled lessons</span>
       <button class="ml-2">
@@ -22,10 +20,13 @@
 
       <span class="mt-8 font-bold">Your schedule is empty</span>
 
-      <span class="text-purple-500"> Make your first appointment </span>
+      <span class="text-purple-500"> Make your first session! </span>
 
-      <button class="px-4 py-2 mt-8 bg-purple-800 rounded-lg">
-        Find a Job
+      <button
+        class="px-4 py-2 mt-8 bg-purple-800 rounded-lg"
+        @click="checkVerifiedStatus()"
+      >
+        Create Session
       </button>
     </div>
   </div>
@@ -36,6 +37,17 @@ import EmptySession from '~/assets/svg/empty_session.svg?inline'
 export default {
   components: {
     EmptySession,
+  },
+  methods: {
+    checkVerifiedStatus() {
+      if (this.$fire.auth.currentUser.emailVerified) {
+        this.$toast.info('This feature is coming soon!')
+      } else {
+        this.$toast.error(
+          'To access this feature, please verify your email first!'
+        )
+      }
+    },
   },
 }
 </script>
