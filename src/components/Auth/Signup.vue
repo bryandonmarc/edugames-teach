@@ -23,9 +23,8 @@
     <div class="p-1 lg:hidden">
       <span>
         <nuxt-link
-          to="/signup"
+          to="/login"
           class="text-sm italic text-gray-700 underline no-select"
-          @click.native="$formulate.reset('signup')"
         >
           Already have an account?
         </nuxt-link>
@@ -74,9 +73,12 @@ export default {
   methods: {
     ...mapActions('signup', ['createUser']),
     async submitHandler(data) {
+      const createUserTrace = this.$fire.performance.trace('createUser')
+      createUserTrace.start()
       this.loading = true
       try {
         await this.createUser(data)
+        createUserTrace.stop()
         this.$toast.success(
           'You have registered successfully! Please check your email to verify your account.'
         )

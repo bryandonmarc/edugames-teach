@@ -45,10 +45,10 @@
             teaching companion service featuring gamified learning with a fun,
             interactive educational game!
           </p>
-          <a
-            href="#"
+          <nuxt-link
+            to="/signup"
             class="px-10 py-3 text-lg font-semibold text-white bg-purple-500 rounded-full hover:bg-purple-400"
-            >TRY NOW</a
+            >TRY NOW</nuxt-link
           >
         </div>
         <div class="sm:w-3/5">

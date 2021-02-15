@@ -25,7 +25,6 @@
         <nuxt-link
           to="/signup"
           class="text-sm italic text-gray-700 underline no-select"
-          @click.native="$formulate.reset('login')"
         >
           Don't have an account?
         </nuxt-link>
@@ -59,9 +58,12 @@ export default {
   methods: {
     ...mapActions('login', ['getUser']),
     async submitHandler(data) {
+      const getUserTrace = this.$fire.performance.trace('getUser')
+      getUserTrace.start()
       this.loading = true
       try {
         await this.getUser(data)
+        getUserTrace.stop()
         this.$toast.success('Successfully logged in!')
         this.$router.push({ name: 'home' })
         this.$nextTick(() => {

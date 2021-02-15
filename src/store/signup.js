@@ -20,13 +20,13 @@ export const actions = {
       .then(() => {
         // commit('SET_USERNAME', username)
         const user = this.$fire.auth.currentUser
-        user
+        return user
           .updateProfile({ displayName: username })
           .then(() => {
-            user
+            return user
               .sendEmailVerification()
               .then(() => {
-                this.$fire.firestore
+                return this.$fire.firestore
                   .collection('teachers')
                   .doc(email)
                   .set({

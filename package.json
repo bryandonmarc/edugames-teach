@@ -29,6 +29,7 @@
     }
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.15",
     "@braid/vue-formulate": "^2.5.0",
     "@nuxtjs/firebase": "^7.4.1",
     "@nuxtjs/pwa": "^3.3.5",

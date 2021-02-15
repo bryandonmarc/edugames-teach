@@ -12,9 +12,12 @@
           v-for="(item, index) in auth"
           :key="index"
           class="absolute top-0 h-full transition-all duration-500 ease-in-out lg:block"
-          :class="[{ hidden: $route.params.login != item.name }, item.class]"
+          :class="[{ hidden: $route.params.auth != item.name }, item.class]"
         >
-          <div v-if="item.name === 'login'" class="absolute mt-4 ml-2">
+          <div
+            class="absolute mt-4 ml-2"
+            :class="{ 'md:invisible': item.name === 'signup' }"
+          >
             <span>
               <nuxt-link to="/">
                 <svg
@@ -105,6 +108,11 @@ export default {
         { name: 'signup', component: Signup, class: 'sign-up-container' },
       ],
       rightpanelactive: false,
+    }
+  },
+  mounted() {
+    if (this.$route.params.auth === 'signup') {
+      this.rightpanelactive = true
     }
   },
 }

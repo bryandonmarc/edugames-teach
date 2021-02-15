@@ -41,6 +41,18 @@ export default {
     '@nuxtjs/svg',
   ],
 
+  // Modules: https://go.nuxtjs.dev/config-modules
+  modules: [
+    // https://go.nuxtjs.dev/pwa
+    '@nuxtjs/pwa',
+    // https://google-fonts.nuxtjs.org
+    '@nuxtjs/google-fonts',
+    // https://firebase.nuxtjs.org/
+    '@nuxtjs/firebase',
+    // https://github.com/nuxt-community/community-modules/tree/master/packages/toast
+    '@nuxtjs/toast',
+  ],
+
   tailwindcss: {
     config: {
       purge: [
@@ -93,18 +105,6 @@ export default {
     },
   },
 
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    // https://google-fonts.nuxtjs.org
-    '@nuxtjs/google-fonts',
-    // https://firebase.nuxtjs.org/
-    '@nuxtjs/firebase',
-    // https://github.com/nuxt-community/community-modules/tree/master/packages/toast
-    '@nuxtjs/toast',
-  ],
-
   // https://github.com/nuxt-community/community-modules/tree/master/packages/toast#setup
   toast: {
     theme: 'bubble',
@@ -143,7 +143,6 @@ export default {
       },
       firestore: true,
       performance: true,
-      analytics: true,
     },
   },
 
