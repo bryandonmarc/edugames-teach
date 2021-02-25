@@ -8,7 +8,7 @@
     </p>
     <button
       id="signIn"
-      class="inline-flex border border-white ghost focus:outline-none formulate-formbutton"
+      class="inline-flex border border-white ghost focus:outline-none"
       form="rightform"
       type="reset"
       @click="$emit('update:active', emitBoolean)"
@@ -39,3 +39,9 @@ export default {
   },
 }
 </script>
+
+<style lang="postcss" scoped>
+.ghost::v-deep {
+  @apply px-12 py-3 text-xs font-bold tracking-widest uppercase rounded-full text-white bg-transparent;
+}
+</style>

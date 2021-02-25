@@ -1,6 +1,3 @@
-// https://firebase.nuxtjs.org/tutorials/ssr
-const config = require('../../nuxt.config')
-
 const initialState = () => ({
   authUser: null,
   // code: '',
@@ -26,34 +23,37 @@ export const mutations = {
   //   state.status = value
   // },
 
-  SET_AUTH_USER: (state, { authUser }) => {
+  SET_AUTH_USER: (state, authUser) => {
     state.authUser = {
       uid: authUser.uid,
       email: authUser.email,
       displayName: authUser.displayName,
     }
   },
+
+  SET_AUTH_DISPLAYNAME: (state, displayName) => {
+    state.authUser.displayName = displayName
+  },
 }
 
 export const actions = {
   async onAuthStateChanged({ commit }, { authUser }) {
-    if (!authUser) {
+    const auth = await authUser
+    if (!auth) {
       commit('RESET_STORE')
       return
     }
-    if (authUser && authUser.getIdToken) {
-      if (config.dev) {
-        try {
-          const idToken = await authUser.getIdToken(true)
-          // eslint-disable-next-line no-console
-          console.info('idToken', idToken)
-        } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error(e)
-        }
+    if (auth && auth.getIdToken) {
+      try {
+        const idToken = await auth.getIdToken(true)
+        // eslint-disable-next-line no-console
+        console.info('idToken', idToken)
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e)
       }
+      commit('SET_AUTH_USER', auth)
     }
-    commit('SET_AUTH_USER', { authUser })
   },
 
   // async findUser({ commit }, { email }) {
@@ -72,24 +72,24 @@ export const actions = {
   async getUser({ commit }, { email, password }) {
     return await this.$fire.auth
       .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        // commit('SET_STATUS', true)
-        return true
+      .then(({ user }) => {
+        commit('SET_AUTH_USER', user)
       })
-      .catch(({ code }) => {
+      .catch(({ message }) => {
         commit('RESET_STORE')
-        throw code
+        throw message
       })
   },
 
-  async logOut() {
-    await this.$fire.auth
+  async logOut({ commit }) {
+    return await this.$fire.auth
       .signOut()
       .then(() => {
+        commit('RESET_STORE')
         this.$toast.info('Successfully logged out!')
       })
-      .catch(({ code }) => {
-        this.$toast.error('An error occured. ' + code)
+      .catch(({ message }) => {
+        this.$toast.error('An error occured. ' + message)
       })
   },
 }

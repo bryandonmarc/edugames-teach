@@ -65,10 +65,11 @@ export default {
         await this.getUser(data)
         getUserTrace.stop()
         this.$toast.success('Successfully logged in!')
+        this.$formulate.reset('login')
+        // this.$nextTick(() => {
+        //   this.$router.push({ name: 'home' })
+        // })
         this.$router.push({ name: 'home' })
-        this.$nextTick(() => {
-          this.$formulate.reset('login')
-        })
       } catch (error) {
         switch (error) {
           case 'auth/user-disabled':
@@ -89,3 +90,13 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.formulate-formbutton::v-deep {
+  @apply px-12 py-3 text-xs font-bold tracking-widest uppercase rounded-full bg-purple-500 text-white;
+
+  &:disabled {
+    @apply font-bold text-white bg-gray-400 opacity-50 pointer-events-none select-none;
+  }
+}
+</style>

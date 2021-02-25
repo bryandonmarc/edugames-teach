@@ -20,14 +20,21 @@
     <ul class="mt-2 text-gray-700 capitalize dark:text-gray-400">
       <!-- Links -->
 
-      <li class="p-2 mt-3 text-blue-600 rounded-lg dark:text-blue-300">
+      <li class="p-2 mt-3 rounded-lg dark:text-blue-300">
         <nuxt-link to="/home" class="flex flex-col items-center">
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+          <svg
+            class="w-5 h-5 stroke-current"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path
-              d="M19 5v2h-4V5h4M9 5v6H5V5h4m10 8v6h-4v-6h4M9
-							17v2H5v-2h4M21 3h-8v6h8V3M11 3H3v10h8V3m10
-							8h-8v10h8V11m-10 4H3v6h8v-6z"
-            ></path>
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
+            />
           </svg>
           <span class="mt-2 text-xs">Dashboard</span>
         </nuxt-link>
@@ -36,20 +43,42 @@
       <li
         class="p-2 mt-3 rounded-lg hover:text-blue-600 dark-hover:text-blue-300"
       >
-        <nuxt-link
-          to="/sessions"
-          class="flex flex-col items-center"
-          @click.native="notImplemented(), (event) => event.preventDefault()"
-        >
-          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+        <nuxt-link to="/session" class="flex flex-col items-center">
+          <svg
+            class="w-5 h-5 stroke-current"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
             <path
-              d="M19 19H5V8h14m0-5h-1V1h-2v2H8V1H6v2H5a2 2 0 00-2
-							2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2m-2.47
-							8.06L15.47 10l-4.88 4.88-2.12-2.12-1.06 1.06L10.59
-							17l5.94-5.94z"
-            ></path>
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 13v-1m4 1v-3m4 3V8M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
+            />
           </svg>
-          <span class="mt-2 text-xs">Sessions</span>
+          <span class="mt-2 text-xs">Classes</span>
+        </nuxt-link>
+      </li>
+
+      <li
+        class="p-2 mt-3 rounded-lg hover:text-blue-600 dark-hover:text-blue-300"
+      >
+        <nuxt-link to="/activity" class="flex flex-col items-center">
+          <svg
+            class="w-5 h-5 stroke-current"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <span class="mt-2 text-xs">Activities</span>
         </nuxt-link>
       </li>
     </ul>
@@ -85,9 +114,12 @@ import { mapActions } from 'vuex'
 export default {
   methods: {
     ...mapActions('login', ['logOut']),
-    notImplemented() {
-      this.$toast.info('This feature is coming soon!')
-    },
   },
 }
 </script>
+
+<style scoped>
+.nuxt-link-active {
+  @apply text-blue-600;
+}
+</style>

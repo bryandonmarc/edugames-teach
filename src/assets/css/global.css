@@ -1,5 +1,24 @@
+*,
+*::before,
+*::after {
+  @apply box-border m-0;
+}
+
+html {
+  @apply box-border h-full font-sans text-base subpixel-antialiased md:antialiased;
+}
+
 .action-white{
     color: white !important;
     text-decoration: none !important;
     cursor: pointer !important;
 }
+
+.hide-scroll-bar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}
+

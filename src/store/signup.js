@@ -14,41 +14,45 @@
 // }
 
 export const actions = {
-  async createUser({ commit }, { username, email, password }) {
+  async registerTeacher({ commit }, { username, email, password }) {
     return await this.$fire.auth
       .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        // commit('SET_USERNAME', username)
-        const user = this.$fire.auth.currentUser
-        return user
-          .updateProfile({ displayName: username })
-          .then(() => {
-            return user
-              .sendEmailVerification()
-              .then(() => {
-                return this.$fire.firestore
-                  .collection('teachers')
-                  .doc(email)
-                  .set({
-                    displayName: username,
-                  })
-                  .then(() => {
-                    return true
-                  })
-                  .catch(({ code }) => {
-                    throw code
-                  })
-              })
-              .catch(({ code }) => {
-                throw code
-              })
-          })
-          .catch(({ code }) => {
-            throw code
-          })
+      .then(async ({ user }) => {
+        return (await user.updateProfile({ displayName: username })) ?? user
       })
-      .catch(({ code }) => {
-        throw code
+      .then(async (user) => {
+        commit('login/SET_AUTH_DISPLAYNAME', username)
+        return (await user.sendEmailVerification()) ?? user
+      })
+      .then(async ({ email, displayName }) => {
+        await this.$fire.firestore.collection('teachers').doc(email).set({
+          displayName,
+        })
+      })
+      .catch(({ message }) => {
+        throw message
+      })
+  },
+
+  async registerStudent({ commit }, { username, email, password }) {
+    return await this.$fire.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(async ({ user }) => {
+        return (await user.updateProfile({ displayName: username })) ?? user
+      })
+      .then(async (user) => {
+        return (await user.sendEmailVerification()) ?? user
+      })
+      .then(async ({ email, displayName }) => {
+        await this.$fire.firestore.collection('students').doc(email).set({
+          'display-name': displayName,
+        })
+      })
+      .then(() => {
+        commit('login/RESET_STORE')
+      })
+      .catch(({ message }) => {
+        throw message
       })
   },
 }

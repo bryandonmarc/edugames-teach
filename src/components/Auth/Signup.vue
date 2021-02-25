@@ -71,21 +71,22 @@ export default {
     }
   },
   methods: {
-    ...mapActions('signup', ['createUser']),
+    ...mapActions('signup', ['registerTeacher']),
     async submitHandler(data) {
       const createUserTrace = this.$fire.performance.trace('createUser')
       createUserTrace.start()
       this.loading = true
       try {
-        await this.createUser(data)
+        await this.registerTeacher(data)
         createUserTrace.stop()
         this.$toast.success(
           'You have registered successfully! Please check your email to verify your account.'
         )
+        this.$formulate.reset('signup')
+        // this.$nextTick(() => {
+        //   this.$router.push({ name: 'home' })
+        // })
         this.$router.push({ name: 'home' })
-        this.$nextTick(() => {
-          this.$formulate.reset('signup')
-        })
       } catch (error) {
         switch (error) {
           case 'auth/email-already-in-use':
@@ -94,7 +95,7 @@ export default {
             )
             break
           default:
-            this.$toast.error('An error occured.' + error)
+            this.$toast.error('An error occured. ' + error)
             break
         }
       }
@@ -103,3 +104,13 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.formulate-formbutton::v-deep {
+  @apply px-12 py-3 text-xs font-bold tracking-widest uppercase rounded-full bg-purple-500 text-white;
+
+  &:disabled {
+    @apply font-bold text-white bg-gray-400 opacity-50 pointer-events-none select-none;
+  }
+}
+</style>

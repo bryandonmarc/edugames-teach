@@ -5,7 +5,10 @@
     :custom-class="customClass"
     :progress="progress"
   >
-    {{ timeDifferenceText }}
+    <template #inside>
+      {{ timeDifferenceText || "Time's Up!" }}
+    </template>
+    <slot></slot>
   </ProgressCircle>
 </template>
 
@@ -14,7 +17,7 @@ export default {
   props: {
     radius: {
       type: Number,
-      default: 100,
+      default: 80,
     },
     stroke: {
       type: Number,
@@ -52,10 +55,11 @@ export default {
       return this.time
     },
     timeDifference() {
-      const percentage =
-        (this.currentTime.getTime() - this.endTime.getTime()) /
-        (this.endTime.getTime() - this.startTime.getTime())
-      const diff = this.endTime.getTime() - this.currentTime.getTime()
+      const start = this.startTime.getTime()
+      const end = this.endTime.getTime()
+      const current = this.currentTime.getTime()
+      const diff = end - current
+      const percentage = (current - end) / (end - start)
       const seconds = Math.floor((diff / 1000) % 60)
       const minutes = Math.floor((diff / 1000 / 60) % 60)
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
@@ -71,6 +75,7 @@ export default {
     },
     timeDifferenceText() {
       let str = ''
+
       const diff = (({ days, hours, minutes, seconds }) => [
         days,
         hours,
@@ -78,14 +83,15 @@ export default {
         seconds,
       ])(this.timeDifference)
 
+      const appendToString = (_ctr, i) => {
+        str +=
+          (_ctr > 0 ? ' ' : '') +
+          diff[i] +
+          { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
+      }
+
       for (let i = 0, n = diff.length, _ctr = 0; _ctr < 2 && i < n; ++i) {
-        if (diff[i]) {
-          str +=
-            (_ctr > 0 ? ' ' : '') +
-            diff[i] +
-            { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
-          _ctr += 1
-        }
+        diff[i] && appendToString(_ctr, i) && ++_ctr
       }
 
       return str
@@ -99,8 +105,8 @@ export default {
   },
   methods: {
     incrementTime() {
-      if (this.time.getTime() < this.endTime.getTime())
-        this.time = new Date(this.time.getTime() + 1000)
+      const _date = new Date(this.time.getTime() + 1000)
+      if (_date < this.endTime.getTime()) this.time = _date
     },
   },
 }

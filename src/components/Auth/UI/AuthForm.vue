@@ -58,37 +58,34 @@ export default {
 }
 </script>
 
-<style lang="postcss">
-.formulate-textfield {
-  @apply rounded-md mb-0 mt-2 w-full px-3 py-3 bg-gray-50;
-}
+<style lang="scss" scoped>
+.formulate-input::v-deep {
+  .formulate-input-wrapper {
+    .formulate-input-element {
+      input[type='text'],
+      input[type='password'] {
+        @apply w-full p-3 mt-2 mb-0 rounded-md bg-gray-50;
 
-.formulate-textfield:focus,
-.formulate-textfield:active {
-  @apply ring-4 ring-purple-300 ring-opacity-50 border-2 border-purple-400 mb-1 outline-none;
-}
+        &:focus,
+        &:active {
+          @apply mb-1 border-2 border-purple-400 outline-none ring-4 ring-purple-300 ring-opacity-50;
+        }
 
-.formulate-textfield.is-valid {
-  @apply ring-4 ring-green-300 ring-opacity-50 border-2 border-green-400 mb-1;
-}
+        &.has-error {
+          @apply mb-1 border-2 border-red-400 ring-4 ring-red-300 ring-opacity-50;
+        }
 
-.formulate-textfield.has-error {
-  @apply ring-4 ring-red-300 ring-opacity-50 border-2 border-red-400 mb-1;
-}
+        &.is-valid {
+          @apply mb-1 border-2 border-green-400 ring-4 ring-green-300 ring-opacity-50;
+        }
+      }
+    }
+  }
 
-.formulate-formbutton {
-  @apply px-12 py-3 text-xs font-bold tracking-widest uppercase rounded-full;
-}
-
-.formulate-formbutton:disabled {
-  @apply pointer-events-none select-none opacity-50 bg-gray-400 text-white font-bold;
-}
-
-.formulate-formbutton:not(.ghost):not(:disabled) {
-  @apply bg-purple-600 text-white;
-}
-
-.formulate-input-error {
-  @apply text-xs text-red-500;
+  .formulate-input-errors {
+    .formulate-input-error {
+      @apply text-xs text-red-500;
+    }
+  }
 }
 </style>

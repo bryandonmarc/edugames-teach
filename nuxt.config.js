@@ -1,4 +1,4 @@
-import plugin from 'tailwindcss/plugin'
+import tailwindcss from './tailwind.config'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -44,7 +44,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
+    // '@nuxtjs/pwa',
     // https://google-fonts.nuxtjs.org
     '@nuxtjs/google-fonts',
     // https://firebase.nuxtjs.org/
@@ -55,53 +55,7 @@ export default {
 
   tailwindcss: {
     config: {
-      purge: [
-        './src/components/**/*.{vue,js}',
-        './src/layouts/**/*.vue',
-        './src/pages/**/*.vue',
-        './src/plugins/**/*.{js}',
-        './nuxt.config.{js}',
-      ],
-      darkMode: false, // or 'media' or 'class'
-      theme: {
-        extend: {
-          fontFamily: {
-            montserrat: ['Montserrat', 'sans-serif'],
-          },
-          fontSize: {
-            'display-1': 'calc(1.725rem + 5.7vw)',
-            'display-2': 'calc(1.675rem + 5.1vw)',
-            'display-3': 'calc(1.575rem + 3.9vw)',
-            'display-4': 'calc(1.475rem + 2.7vw)',
-            h1: 'calc(1.375rem + 1.5vw)',
-            h2: 'calc(1.325rem + 0.9vw)',
-            h3: 'calc(1.3rem + 0.6vw)',
-            h4: 'calc(1.275rem + 0.3vw)',
-          },
-          colors: {},
-          translate: {
-            '-1/5': '-20%',
-            '1/5': '20%',
-          },
-        },
-      },
-      variants: {
-        extend: {},
-      },
-      plugins: [
-        plugin(function ({ addBase, config }) {
-          addBase({
-            '.display-1': { fontSize: config('theme.fontSize.display-1') },
-            '.display-2': { fontSize: config('theme.fontSize.display-2') },
-            '.display-3': { fontSize: config('theme.fontSize.display-3') },
-            '.display-4': { fontSize: config('theme.fontSize.display-4') },
-            h1: { fontSize: config('theme.fontSize.h1') },
-            h2: { fontSize: config('theme.fontSize.h2') },
-            h3: { fontSize: config('theme.fontSize.h3') },
-            h4: { fontSize: config('theme.fontSize.h4') },
-          })
-        }),
-      ],
+      ...tailwindcss,
     },
   },
 
@@ -158,18 +112,18 @@ export default {
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
-  pwa: {
-    manifest: {
-      lang: 'en',
-    },
-  },
+  // pwa: {
+  //   manifest: {
+  //     lang: 'en',
+  //   },
+  // },
 
   // https://dev.to/kiritchoukc/deploy-nuxt-on-firebase-4ad8
   srcDir: 'src',
   // // https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate/
   generate: {
     dir: 'public',
-    exclude: ['/home'],
+    // exclude: ['/home'],
   },
 
   // https://github.com/nuxt-community/firebase-module/issues/93#issuecomment-733627355

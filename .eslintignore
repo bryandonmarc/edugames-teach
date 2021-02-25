@@ -1,0 +1,8 @@
+# Ignore static files
+src/static/
+
+# Git
+.gitignore
+
+# Nuxt
+# .
