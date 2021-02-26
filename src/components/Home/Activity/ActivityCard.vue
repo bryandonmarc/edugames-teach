@@ -66,16 +66,28 @@
         </div>
       </slot>
 
-      <div class="flex justify-end text-gray-500">
+      <div class="flex flex-col justify-end text-gray-500 md:flex-row">
         <div class="flex italic">
           {{ startTime.toLocaleDateString(locale, options) }}
           -
           {{ endTime.toLocaleDateString(locale, options) }}
         </div>
 
-        <!-- <p class="text-sm font-medium leading-snug text-gray-600">
-            14 hours ago
-          </p> -->
+        <p class="text-sm font-medium leading-snug text-gray-600">
+          <span
+            class="inline-flex items-center px-3 pb-1 mr-2 text-sm font-semibold text-purple-600 underline rounded-full cursor-pointer bg-grey-lighter text-grey-darker"
+            @click="copyToClipboard"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 mr-2 fill-current"
+              viewBox="0 0 469 469"
+            >
+              <path
+                d="M249 192a128 128 0 100 85h92v86h86v-86h42v-85H249zm-121 85a43 43 0 110-85 43 43 0 010 85z"
+              /></svg
+            >{{ id }}</span
+          >
+        </p>
       </div>
     </div>
   </li>
@@ -87,6 +99,10 @@
 
 export default {
   props: {
+    id: {
+      type: String,
+      default: 'pierre-1433',
+    },
     activityName: {
       type: String,
       default: 'Test Activity (Example)',
@@ -141,6 +157,28 @@ export default {
   methods: {
     notImplemented() {
       this.$toast.info('This feature is coming soon!')
+    },
+    copyToClipboard() {
+      const el = document.createElement('textarea')
+      el.value = this.id
+      el.setAttribute('readonly', '')
+      el.style.position = 'absolute'
+      el.style.left = '-9999px'
+      document.body.appendChild(el)
+      const selected =
+        document.getSelection().rangeCount > 0
+          ? document.getSelection().getRangeAt(0)
+          : false
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      if (selected) {
+        document.getSelection().removeAllRanges()
+        document.getSelection().addRange(selected)
+      }
+      this.$toast.info(
+        `Activity code&nbsp;<u>${this.id}</u>&nbsp;copied to clipboard!`
+      )
     },
   },
 }

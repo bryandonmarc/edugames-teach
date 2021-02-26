@@ -25,6 +25,7 @@
         <ul class="order-1 w-5/12 rounded-lg shadow-xl">
           <ActivityCard
             v-bind="{
+              id: activity.id,
               activityName: activity.activityName,
               activityTopic: activity.activityTopic,
               startTime: activity.startTime,
