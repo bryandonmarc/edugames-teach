@@ -35,8 +35,19 @@
 
         <div>
           <!-- List -->
-          <ul v-if="true">
-            <ActivityCard @click="notImplemented()" />
+          <ul v-if="getActivities.length" class="py-4 space-y-4">
+            <ActivityCard
+              v-for="(activity, index) in getActivities.slice(0, 2)"
+              :key="index"
+              class="px-4"
+              v-bind="{
+                id: activity.id,
+                activityName: activity.activityName,
+                activityTopic: activity.activityTopic,
+                startTime: activity.startTime,
+                endTime: activity.endTime,
+              }"
+            ></ActivityCard>
           </ul>
           <EmptyActivities v-else />
 
@@ -67,7 +78,7 @@
             </svg>
           </button>
         </h3>
-        <ul v-if="getSessions.length" class="grid grid-cols-2 gap4">
+        <ul v-if="getSessions.length" class="grid grid-cols-2">
           <nuxt-link
             v-for="(session, index) in getSessions.slice(0, 4)"
             :key="index"
@@ -125,6 +136,7 @@ export default {
   computed: {
     ...mapGetters('login', ['getAuthUser']),
     ...mapGetters('session', ['getSessions']),
+    ...mapGetters('activity', ['getActivities']),
   },
   methods: {
     ...mapActions('login', ['logOut']),

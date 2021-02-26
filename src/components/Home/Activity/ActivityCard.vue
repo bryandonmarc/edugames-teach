@@ -10,7 +10,7 @@
         <span class="text-xl font-bold">{{ activityName }}</span>
 
         <div class="flex flex-col text-gray-500 md:flex-row">
-          <div class="inline-flex items-center">
+          <div v-if="className" class="inline-flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="w-5 h-5 mr-1 fill-current"
@@ -68,9 +68,9 @@
 
       <div class="flex flex-col justify-end text-gray-500 md:flex-row">
         <div class="flex italic">
-          {{ startTime.toLocaleDateString(locale, options) }}
+          {{ new Date(startTime).toLocaleDateString(locale, options) }}
           -
-          {{ endTime.toLocaleDateString(locale, options) }}
+          {{ new Date(endTime).toLocaleDateString(locale, options) }}
         </div>
 
         <p class="text-sm font-medium leading-snug text-gray-600">
@@ -109,11 +109,11 @@ export default {
     },
     className: {
       type: String,
-      default: 'CS520-1L B43',
+      default: '',
     },
     activityTopic: {
       type: String,
-      default: 'General Knowledge',
+      default: '',
     },
     startTime: {
       type: Date,

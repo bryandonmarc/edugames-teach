@@ -55,8 +55,8 @@ export default {
       return this.time
     },
     timeDifference() {
-      const start = this.startTime.getTime()
-      const end = this.endTime.getTime()
+      const start = new Date(this.startTime).getTime()
+      const end = new Date(this.endTime).getTime()
       const current = this.currentTime.getTime()
       const diff = end - current
       const percentage = (current - end) / (end - start)
@@ -76,34 +76,31 @@ export default {
     timeDifferenceText() {
       let str = ''
 
-      const diff = (({ days, hours, minutes, seconds }) => [
-        days,
-        hours,
-        minutes,
-        seconds,
-      ])(this.timeDifference)
+      if (this.currentTime.getTime() < new Date(this.endTime).getTime()) {
+        const diff = (({ days, hours, minutes, seconds }) => [
+          days,
+          hours,
+          minutes,
+          seconds,
+        ])(this.timeDifference)
 
-      // const appendToString = (_ctr, i) => {
-      //   str +=
-      //     (_ctr > 0 ? ' ' : '') +
-      //     diff[i] +
-      //     { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
-      // }
-
-      for (let i = 0, n = diff.length, _ctr = 0; _ctr < 2 && i < n; ++i) {
-        if (diff[i]) {
-          str +=
-            (_ctr > 0 ? ' ' : '') +
-            diff[i] +
-            { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
-          _ctr += 1
+        for (let i = 0, n = diff.length, _ctr = 0; _ctr < 2 && i < n; ++i) {
+          if (diff[i]) {
+            str +=
+              (_ctr > 0 ? ' ' : '') +
+              diff[i] +
+              { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
+            _ctr += 1
+          }
         }
       }
 
       return str
     },
     progress() {
-      return Math.round(this.timeDifference.percentage * 100).toString()
+      return this.currentTime.getTime() < new Date(this.endTime).getTime()
+        ? Math.round(this.timeDifference.percentage * 100).toString()
+        : 0
     },
   },
   mounted() {
@@ -112,7 +109,7 @@ export default {
   methods: {
     incrementTime() {
       const _date = new Date(this.time.getTime() + 1000)
-      if (_date < this.endTime.getTime()) this.time = _date
+      if (_date < new Date(this.endTime).getTime()) this.time = _date
     },
   },
 }

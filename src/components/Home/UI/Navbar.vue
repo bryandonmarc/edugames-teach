@@ -61,7 +61,7 @@
         </nuxt-link>
       </li>
 
-      <li
+      <!-- <li
         class="p-2 mt-3 rounded-lg hover:text-blue-600 dark-hover:text-blue-300"
       >
         <nuxt-link to="/activity" class="flex flex-col items-center">
@@ -80,7 +80,7 @@
           </svg>
           <span class="mt-2 text-xs">Activities</span>
         </nuxt-link>
-      </li>
+      </li> -->
     </ul>
 
     <div
