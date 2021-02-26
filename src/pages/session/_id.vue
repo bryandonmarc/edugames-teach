@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-white">
+  <div class="flex flex-col w-full h-full bg-white">
     <div class="w-full px-16 pt-8 border-b">
       <div class="flex flex-row m-8">
         <img
@@ -28,14 +28,14 @@
           </div>
         </div>
       </div>
-      <nav class="ml-14">
-        <ul class="flex flex-col sm:flex-row">
+      <nav class="md:ml-14">
+        <ul class="flex flex-row">
           <li
             v-for="(tab, index) in tabs"
             :key="index"
             class="block px-6 py-4 text-lg font-bold tracking-wide transition ease-in-out border-b-2 cursor-pointer hover:text-purple-500 focus:outline-none"
             :class="[
-              openTab === index
+              currentTab === tab
                 ? 'text-purple-500 border-purple-500'
                 : 'text-gray-500',
             ]"
@@ -46,13 +46,25 @@
         </ul>
       </nav>
     </div>
+    <component
+      :is="currentTab"
+      :class-name="session.className"
+      @success="currentTab = 'Timeline'"
+      @createActivity="currentTab = 'Activities'"
+    ></component>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import Activities from '~/components/Session/Activities'
+import Timeline from '~/components/Session/Timeline'
 
 export default {
+  components: {
+    Activities,
+    Timeline,
+  },
   layout(context) {
     return 'homeTeacherLayout'
   },

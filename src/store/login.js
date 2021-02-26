@@ -24,11 +24,8 @@ export const mutations = {
   // },
 
   SET_AUTH_USER: (state, authUser) => {
-    state.authUser = {
-      uid: authUser.uid,
-      email: authUser.email,
-      displayName: authUser.displayName,
-    }
+    const { uid, email, displayName } = authUser
+    state.authUser = Object.assign({}, { uid, email, displayName })
   },
 
   SET_AUTH_DISPLAYNAME: (state, displayName) => {
@@ -38,21 +35,20 @@ export const mutations = {
 
 export const actions = {
   async onAuthStateChanged({ commit }, { authUser }) {
-    const auth = await authUser
-    if (!auth) {
+    if (!authUser) {
       commit('RESET_STORE')
       return
     }
-    if (auth && auth.getIdToken) {
+    if (authUser && authUser.getIdToken) {
       try {
-        const idToken = await auth.getIdToken(true)
+        const idToken = await authUser.getIdToken(true)
         // eslint-disable-next-line no-console
         console.info('idToken', idToken)
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e)
       }
-      commit('SET_AUTH_USER', auth)
+      commit('SET_AUTH_USER', authUser)
     }
   },
 

@@ -83,15 +83,21 @@ export default {
         seconds,
       ])(this.timeDifference)
 
-      const appendToString = (_ctr, i) => {
-        str +=
-          (_ctr > 0 ? ' ' : '') +
-          diff[i] +
-          { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
-      }
+      // const appendToString = (_ctr, i) => {
+      //   str +=
+      //     (_ctr > 0 ? ' ' : '') +
+      //     diff[i] +
+      //     { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
+      // }
 
       for (let i = 0, n = diff.length, _ctr = 0; _ctr < 2 && i < n; ++i) {
-        diff[i] && appendToString(_ctr, i) && ++_ctr
+        if (diff[i]) {
+          str +=
+            (_ctr > 0 ? ' ' : '') +
+            diff[i] +
+            { 0: 'd', 1: 'h', 2: 'm', 3: 's' }[i]
+          _ctr += 1
+        }
       }
 
       return str

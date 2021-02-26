@@ -8,7 +8,8 @@ const initialState = () => ({
 export const state = () => initialState()
 
 export const getters = {
-  getSessions: (state) => state.sessions,
+  getSessions: (state) =>
+    state.sessions.slice().sort((a, b) => b.createdAt - a.createdAt),
   getSessionById: (state) => (id) =>
     state.sessions.find((session) => session.id === id),
   getSessionIds: (state) => state.sessions.map(({ id }) => id),
@@ -37,12 +38,12 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchSessions({ getters, commit, rootState: { login } }) {
+  async fetchSessions({ getters, dispatch, commit, rootState: { login } }) {
     return await this.$fire.firestore
-      .collection('teachers')
-      .doc(login.authUser.email)
-      .onSnapshot((snapshot) => {
-        const snapshotSessions = snapshot.data().sessions
+      .collection('sessions')
+      .where('teacherId', '==', login.authUser.email)
+      .onSnapshot(async (querySnapshot) => {
+        const snapshotSessions = querySnapshot.docs
         const stateSessions = getters.getSessions
 
         // filter ids from stateSessions that are not in snapshotSessions
@@ -56,37 +57,60 @@ export const actions = {
             commit('REMOVE_SESSION', id)
           })
 
-        // commit all snapshotSessions not in stateSessions
-        snapshotSessions
-          .filter((session) => {
-            if (stateSessions.length)
-              return !getters.getSessionIds.includes(session.id)
-            return true
-          })
-          .forEach(async (session) => {
-            // commit('SET_SESSION', {
-            //   id: session.id,
-            //   ...(await session.get().then((doc) => {
-            //     const data = doc.data()
-            //     data.createdAt = data.createdAt.toDate()
-            //     return data
-            //   })),
-            // })
-            await session.get().then((doc) => {
-              if (doc.exists) {
-                const data = doc.data()
-                data.createdAt = data.createdAt.toDate()
-                commit('SET_SESSION', {
-                  id: session.id,
-                  ...data,
-                })
-              }
-              // else {
-              //   commit('REMOVE_SESSION', session.id)
-              // }
+        const TO_BE_COMMITED = snapshotSessions.filter((session) => {
+          if (stateSessions.length)
+            return !getters.getSessionIds.includes(session.id)
+          return true
+        })
+
+        // Parallel asynchronous
+        await Promise.all(
+          TO_BE_COMMITED.map(async (session) => {
+            const { className, createdAt, imgUrl, topic } = await session.data()
+            commit('SET_SESSION', {
+              id: session.id,
+              ...{
+                className,
+                createdAt: createdAt.toDate(),
+                imgUrl,
+                topic,
+              },
             })
           })
+        )
+
+        await dispatch('activity/fetchActivities', null, { root: true })
+
+        // querySnapshot.forEach(async (documentSnapshot) => {
+        //   const snapshotSessions = documentSnapshot.data()
+
+        //   // commit all snapshotSessions not in stateSessions
+
+        // })
       })
+    // .onSnapshot(async (snapshot) => {
+    //   // const snapshotSessions = snapshot.data().sessions
+    //   // const stateSessions = getters.getSessions
+
+    //   // Sequential asynchronous
+    //   // for await (const doc of TO_BE_COMMITED.map((session) =>
+    //   //   session.get()
+    //   // )) {
+    //   //   if (doc.exists) {
+    //   //     const { className, createdAt, imgUrl, topic } = doc.data()
+    //   //     commit('SET_SESSION', {
+    //   //       ...{
+    //   //         className,
+    //   //         createdAt: createdAt.toDate(),
+    //   //         imgUrl,
+    //   //         topic,
+    //   //       },
+    //   //       id: doc.id,
+    //   //     })
+    //   //   }
+    //   // }
+
+    // })
   },
 
   async createSession(
@@ -103,6 +127,7 @@ export const actions = {
     })
     return await sessionDocument
       .set({
+        teacherId: login.authUser.email,
         className,
         topic,
         imgUrl,

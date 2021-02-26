@@ -97,9 +97,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  name: 'TeacherLayout',
   middleware({ app, redirect }) {
     if (!app.$fire.auth.currentUser) {
       return redirect('/')
@@ -115,15 +116,20 @@ export default {
       },
     }
   },
+  computed: {
+    ...mapGetters('session', ['getSessionIds']),
+  },
   async mounted() {
     this.$nextTick(function () {
       this.showSidebar()
     })
     window.addEventListener('resize', this.showSidebar)
     await this.fetchSessions()
+    // if (this.getSessionIds.length) await this.fetchActivities()
   },
   methods: {
     ...mapActions('session', ['fetchSessions']),
+    ...mapActions('activity', ['fetchActivities']),
     showSidebar() {
       if (this.isSidebarOpen === false)
         this.isSidebarOpen = process.browser && window.innerWidth >= 1024
